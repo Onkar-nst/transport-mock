@@ -5,35 +5,37 @@ import Reveal from './Reveal'
 const REVIEWS = [
   {
     quote:
-      'We switched three regional forwarders for Meridian and cut our average transit time by 22%. The live tracking alone pays for itself.',
+      'We moved to Meridian because our old forwarder stopped answering after five. The rates are about the same. The difference is someone replies.',
     name: 'Priya Nair',
-    role: 'Head of Ops, Vanta Retail',
-    color: '#0b63f6',
+    role: 'Operations · Vanta Retail',
   },
   {
     quote:
-      'Customs used to be our nightmare. Now it just… happens. Documents filed, duties handled, cargo never sits. Genuinely the smoothest partner we have.',
+      'Customs was the part that kept me up at night. Now I forward the invoice and it’s handled — and when something’s flagged, they call me before it’s a problem.',
     name: 'Marcus Feld',
-    role: 'Supply Chain Lead, Hexa Foods',
-    color: '#ff7a3d',
+    role: 'Supply chain · Hexa Foods',
   },
   {
     quote:
-      'Their ops desk replies in minutes, day or night. When a vessel was delayed, they rebooked air freight before we even noticed. That is trust.',
+      'A vessel got rolled in Singapore and they had us on the next sailing before I’d seen the email. Cost us a day, not a week. That’s the whole job.',
     name: 'Sofia Alvarez',
-    role: 'Founder, NorthPeak',
-    color: '#16a34a',
+    role: 'Founder · NorthPeak Outdoor',
   },
 ]
 
 export default function Testimonials() {
   return (
-    <section className="section section--soft" id="reviews">
+    <section className="section" id="reviews">
       <div className="container">
-        <Reveal className="section-head center">
-          <span className="eyebrow">Trusted partners</span>
-          <h2>Logistics teams sleep better with Meridian</h2>
-          <p>4.9/5 average rating across 1,800+ verified shipper reviews.</p>
+        <Reveal className="section-head split">
+          <div>
+            <span className="eyebrow">In their words</span>
+            <h2>What customers actually say</h2>
+          </div>
+          <p>
+            Three of them, lightly edited for length. We left the unglamorous
+            parts in — those are the ones that tend to be true.
+          </p>
         </Reveal>
 
         <div className="tst-grid">
@@ -41,21 +43,19 @@ export default function Testimonials() {
             <motion.div
               key={r.name}
               className="tst-card"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.55, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="tst-stars">
                 {Array.from({ length: 5 }).map((_, s) => (
                   <Star key={s} />
                 ))}
               </div>
-              <p className="quote">"{r.quote}"</p>
+              <p className="quote">“{r.quote}”</p>
               <div className="tst-author">
-                <span className="av" style={{ background: r.color }}>
-                  {r.name.charAt(0)}
-                </span>
+                <span className="av">{r.name.charAt(0)}</span>
                 <div>
                   <div className="nm">{r.name}</div>
                   <div className="ro">{r.role}</div>

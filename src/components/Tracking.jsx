@@ -1,13 +1,19 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, MapPin, PackageCheck, Truck, Ship, Warehouse, CheckCircle2, Radar } from 'lucide-react'
+import { Search, MapPin, PackageCheck, Truck, Ship, Warehouse, Check } from 'lucide-react'
 import Reveal from './Reveal'
 
 const TIMELINE = [
-  { icon: <PackageCheck />, a: 'Order received', b: 'Shenzhen, CN · Jun 12, 09:14' },
-  { icon: <Warehouse />, a: 'Processed at hub', b: 'Shenzhen DC · Jun 13, 18:40' },
-  { icon: <Ship />, a: 'Departed origin port', b: 'Singapore · Jun 15, 06:00' },
-  { icon: <Truck />, a: 'Out for delivery', b: 'Rotterdam, NL · ETA Jun 21' },
+  { icon: <PackageCheck />, a: 'Picked up', b: 'Shenzhen, CN · 12 Jun, 09:14' },
+  { icon: <Warehouse />, a: 'Consolidated at hub', b: 'Shenzhen DC · 13 Jun, 18:40' },
+  { icon: <Ship />, a: 'Departed origin port', b: 'Singapore · 15 Jun, 06:00' },
+  { icon: <Truck />, a: 'Out for delivery', b: 'Rotterdam, NL · ETA 21 Jun' },
+]
+
+const CHECKS = [
+  'Live position at every handover',
+  'A heads-up before a delay bites you',
+  'Proof of delivery the moment it’s signed',
 ]
 
 export default function Tracking() {
@@ -20,7 +26,6 @@ export default function Tracking() {
   }
 
   const ref = code.trim() || 'MRD-90427'
-  // 3 of 4 steps complete → 75% progress
   const completed = 3
   const progress = (completed / TIMELINE.length) * 100
 
@@ -28,20 +33,18 @@ export default function Tracking() {
     <section className="section" id="tracking">
       <div className="container track-wrap">
         <Reveal>
-          <span className="eyebrow">
-            <Radar size={14} /> Real-time tracking
-          </span>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.9rem)', margin: '18px 0 16px', fontWeight: 800 }}>
-            Know exactly where your cargo is — to the minute
+          <span className="eyebrow">Tracking</span>
+          <h2 style={{ fontSize: 'clamp(2rem, 4.2vw, 3rem)', margin: '22px 0 16px', fontWeight: 800, letterSpacing: '-0.03em' }}>
+            Know where it is. Honestly.
           </h2>
-          <p style={{ fontSize: '1.08rem', lineHeight: 1.6, marginBottom: 28 }}>
-            Every Meridian shipment streams live GPS and milestone updates straight to your
-            dashboard. Drop in a tracking number to see it in action.
+          <p style={{ fontSize: '1.1rem', lineHeight: 1.6, marginBottom: 28, color: 'var(--body)' }}>
+            Every Meridian shipment streams its position and milestones to one link.
+            Drop in a number to see exactly what your customer would see.
           </p>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {['Live GPS down to the checkpoint', 'Proactive delay alerts', 'Instant proof of delivery'].map((t) => (
-              <li key={t} style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 500, color: 'var(--ink)' }}>
-                <CheckCircle2 size={20} style={{ color: 'var(--blue-600)' }} /> {t}
+            {CHECKS.map((t) => (
+              <li key={t} style={{ display: 'flex', alignItems: 'center', gap: 11, fontWeight: 500, color: 'var(--ink)' }}>
+                <Check size={18} style={{ color: 'var(--accent)', flexShrink: 0 }} /> {t}
               </li>
             ))}
           </ul>
@@ -53,11 +56,11 @@ export default function Tracking() {
               <input
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder="Enter tracking number (e.g. MRD-90427)"
+                placeholder="Tracking number, e.g. MRD-90427"
                 aria-label="Tracking number"
               />
               <button type="submit" aria-label="Track">
-                <Search size={20} />
+                <Search size={19} />
               </button>
             </form>
 
@@ -70,11 +73,11 @@ export default function Tracking() {
                   transition={{ duration: 0.4 }}
                 >
                   <div className="rrow">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--ink)' }}>
-                      <MapPin size={18} style={{ color: 'var(--accent)' }} /> #{ref.toUpperCase()}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, fontFamily: 'var(--font-mono)', color: 'var(--ink)' }}>
+                      <MapPin size={17} style={{ color: 'var(--accent)' }} /> {ref.toUpperCase()}
                     </div>
                     <span className="badge-status">
-                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#047857' }} /> In transit
+                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--accent)' }} /> In transit
                     </span>
                   </div>
 
@@ -91,9 +94,9 @@ export default function Tracking() {
                       <motion.div
                         key={s.a}
                         className={`track-step ${i < completed ? 'ok' : ''}`}
-                        initial={{ opacity: 0, x: -12 }}
+                        initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 + i * 0.12 }}
+                        transition={{ delay: 0.2 + i * 0.1 }}
                       >
                         <span className="ic">{s.icon}</span>
                         <div className="tx">

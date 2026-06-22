@@ -33,9 +33,6 @@ export default function Loader({ onDone }) {
       exit={{ y: '-100%' }}
       transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
     >
-      <span className="hero-glow a" />
-      <span className="hero-glow b" />
-
       <motion.div
         className="loader-inner"
         initial={{ opacity: 0, y: 14 }}
@@ -47,6 +44,11 @@ export default function Loader({ onDone }) {
           Meridian
         </div>
 
+        <div className="loader-meta">
+          <span>Plotting the lane</span>
+          <span className="loader-pct">{pct}%</span>
+        </div>
+
         <div className="loader-track">
           {/* filled portion of the road */}
           <span className="loader-fill" style={{ width: `${pct}%` }} />
@@ -56,11 +58,6 @@ export default function Loader({ onDone }) {
           <div className="loader-truck" style={{ left: `${pct}%` }}>
             <TruckArt width={92} height={47} />
           </div>
-        </div>
-
-        <div className="loader-meta">
-          <span>Routing your shipment…</span>
-          <span className="loader-pct">{pct}%</span>
         </div>
       </motion.div>
     </motion.div>

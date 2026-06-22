@@ -1,23 +1,20 @@
 import { useEffect, useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Loader from './components/Loader'
-import ScrollProgress from './components/ScrollProgress'
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Logos from './components/Logos'
-import Services from './components/Services'
-import Stats from './components/Stats'
-import Process from './components/Process'
-import Tracking from './components/Tracking'
-import Coverage from './components/Coverage'
-import Testimonials from './components/Testimonials'
-import CTA from './components/CTA'
-import Footer from './components/Footer'
+import Layout from './components/Layout'
+import Home from './pages/Home'
+import ServicePage from './pages/ServicePage'
+import About from './pages/About'
+import Track from './pages/Track'
+import Contact from './pages/Contact'
+import NotFound from './pages/NotFound'
 
 export default function App() {
-  const [loading, setLoading] = useState(true)
+  // Show the truck loader only once per browser session, so navigating
+  // between pages stays calm and instant.
+  const [loading, setLoading] = useState(() => !sessionStorage.getItem('meridian-loaded'))
 
-  // Lock scrolling while the loader is on screen.
   useEffect(() => {
     document.body.style.overflow = loading ? 'hidden' : ''
     return () => {
@@ -25,26 +22,27 @@ export default function App() {
     }
   }, [loading])
 
+  const finishLoading = () => {
+    sessionStorage.setItem('meridian-loaded', '1')
+    setLoading(false)
+  }
+
   return (
     <>
       <AnimatePresence>
-        {loading && <Loader key="loader" onDone={() => setLoading(false)} />}
+        {loading && <Loader key="loader" onDone={finishLoading} />}
       </AnimatePresence>
 
-      <ScrollProgress />
-      <Navbar />
-      <main>
-        <Hero />
-        <Logos />
-        <Services />
-        <Stats />
-        <Process />
-        <Tracking />
-        <Coverage />
-        <Testimonials />
-        <CTA />
-      </main>
-      <Footer />
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/services/:slug" element={<ServicePage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/track" element={<Track />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </>
   )
 }

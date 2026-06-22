@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Boxes, Menu, X, ArrowRight } from 'lucide-react'
-
-const LINKS = [
-  { label: 'Services', href: '#services' },
-  { label: 'Process', href: '#process' },
-  { label: 'Tracking', href: '#tracking' },
-  { label: 'Network', href: '#network' },
-  { label: 'Reviews', href: '#reviews' },
-]
+import { Boxes, Menu, X, ArrowRight, ChevronDown } from 'lucide-react'
+import { SERVICES } from '../data/services'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [svcOpen, setSvcOpen] = useState(false)
+  const { pathname } = useLocation()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
@@ -20,6 +16,12 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Close menus on navigation.
+  useEffect(() => {
+    setOpen(false)
+    setSvcOpen(false)
+  }, [pathname])
 
   return (
     <motion.nav
@@ -29,30 +31,53 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="container nav-inner">
-        <a href="#top" className="brand">
-          <span className="brand-mark">
-            <Boxes />
-          </span>
+        <Link to="/" className="brand">
+          <span className="brand-mark"><Boxes /></span>
           Meridian
-        </a>
+        </Link>
 
         <div className="nav-links">
-          {LINKS.map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <div
+            className="nav-dropdown"
+            onMouseEnter={() => setSvcOpen(true)}
+            onMouseLeave={() => setSvcOpen(false)}
+          >
+            <button className="nav-droptoggle">
+              Services <ChevronDown size={16} />
+            </button>
+            <AnimatePresence>
+              {svcOpen && (
+                <motion.div
+                  className="dropdown-menu"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {SERVICES.map((s) => (
+                    <Link key={s.slug} to={`/services/${s.slug}`} className="dropdown-item">
+                      <span className="dd-ic">{s.icon}</span>
+                      <span>
+                        <span className="dd-name">{s.name}</span>
+                        <span className="dd-desc">{s.short}</span>
+                      </span>
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <NavLink to="/track">Track</NavLink>
+          <NavLink to="/about">About</NavLink>
+          <NavLink to="/contact">Contact</NavLink>
         </div>
 
         <div className="nav-cta">
-          <a href="#contact" className="btn btn-primary">
+          <Link to="/contact" className="btn btn-primary">
             Get a quote <ArrowRight />
-          </a>
-          <button
-            className="nav-toggle"
-            aria-label="Toggle menu"
-            onClick={() => setOpen((v) => !v)}
-          >
+          </Link>
+          <button className="nav-toggle" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>
             {open ? <X /> : <Menu />}
           </button>
         </div>
@@ -68,17 +93,20 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
             style={{ overflow: 'hidden' }}
           >
-            <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: 4, paddingTop: 16, paddingBottom: 8 }}>
-              {LINKS.map((l) => (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  style={{ padding: '12px 0', fontWeight: 600, color: scrolled ? 'var(--ink)' : '#fff', borderBottom: '1px solid rgba(128,128,128,0.15)' }}
-                >
-                  {l.label}
-                </a>
+            <div className="container nav-mobile-inner">
+              <span className="nav-mobile-label">Services</span>
+              {SERVICES.map((s) => (
+                <Link key={s.slug} to={`/services/${s.slug}`} className="nav-mobile-link sub">
+                  {s.icon} {s.name}
+                </Link>
               ))}
+              <span className="nav-mobile-label">More</span>
+              <Link to="/track" className="nav-mobile-link">Track shipment</Link>
+              <Link to="/about" className="nav-mobile-link">About us</Link>
+              <Link to="/contact" className="nav-mobile-link">Contact</Link>
+              <Link to="/contact" className="btn btn-primary" style={{ marginTop: 12 }}>
+                Get a quote <ArrowRight />
+              </Link>
             </div>
           </motion.div>
         )}

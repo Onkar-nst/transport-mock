@@ -3,10 +3,26 @@ import { Globe2, ShieldCheck, Headset, Leaf } from 'lucide-react'
 import Reveal from './Reveal'
 
 const FEATS = [
-  { icon: <Globe2 />, title: 'Global network', desc: '200+ ports, 130 countries, and a vetted carrier partner in every major trade lane.' },
-  { icon: <ShieldCheck />, title: 'Cargo insured', desc: 'Full-value coverage and licensed customs brokers protect every shipment, end to end.' },
-  { icon: <Headset />, title: 'Always-on support', desc: 'A dedicated coordinator and 24/7 ops desk — real humans, average reply under 4 minutes.' },
-  { icon: <Leaf />, title: 'Greener freight', desc: 'Carbon-tracked routes and optional offsets on every booking, reported in your dashboard.' },
+  {
+    icon: <Globe2 />,
+    title: 'The lanes we know cold',
+    desc: 'Asia–Europe is our backbone — Shenzhen, Singapore, Rotterdam, Felixstowe. We’ve run them long enough to know which weeks go sideways.',
+  },
+  {
+    icon: <ShieldCheck />,
+    title: 'Cover that actually pays out',
+    desc: 'Full-value marine and cargo insurance, and brokers who file clean so containers don’t sit. We’ve handled the claims you hope you never need.',
+  },
+  {
+    icon: <Headset />,
+    title: 'A name, not a queue',
+    desc: 'You get a coordinator who knows your freight and an ops desk that’s awake while your cargo is. Same people every time you call.',
+  },
+  {
+    icon: <Leaf />,
+    title: 'Carbon on the invoice',
+    desc: 'Every booking shows its emissions, and you can offset at cost. No leaf-shaped badges — just the number, where you can see it.',
+  },
 ]
 
 // Approximate hub coordinates on a 1000x460 viewBox
@@ -19,12 +35,15 @@ export default function Coverage() {
   return (
     <section className="section coverage" id="network">
       <div className="container">
-        <Reveal className="section-head center">
-          <span className="eyebrow" style={{ background: 'rgba(255,255,255,0.08)', color: 'var(--blue-400)' }}>
-            Worldwide coverage
-          </span>
-          <h2>Wherever your cargo needs to go, we're already there</h2>
-          <p>A single network spanning every continent — managed from one dashboard, backed by one team.</p>
+        <Reveal className="section-head split">
+          <div>
+            <span className="eyebrow">Coverage</span>
+            <h2>We file where your cargo goes</h2>
+          </div>
+          <p>
+            Forty-odd lanes we run week in, week out — plus a vetted agent in the
+            ports we don’t. One desk coordinates the lot, so you brief one team, not ten.
+          </p>
         </Reveal>
 
         <div className="cov-grid">
@@ -33,10 +52,10 @@ export default function Coverage() {
               <motion.div
                 key={f.title}
                 className="cov-feat"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                transition={{ duration: 0.45, delay: i * 0.08 }}
               >
                 <span className="ic">{f.icon}</span>
                 <div>
@@ -60,45 +79,38 @@ function WorldMap() {
   return (
     <svg viewBox="0 0 1000 460" fill="none">
       {/* dotted continents impression */}
-      <g fill="rgba(94,155,255,0.22)">
+      <g fill="rgba(24,21,17,0.15)">
         {DOTS.map(([x, y], i) => (
-          <circle key={i} cx={x} cy={y} r="3.2" />
+          <circle key={i} cx={x} cy={y} r="3" />
         ))}
       </g>
 
-      {/* connecting arcs between a few hubs */}
+      {/* connecting lanes between a few hubs */}
       {ARCS.map((d, i) => (
         <motion.path
           key={i}
           d={d}
-          stroke="url(#cov-g)"
-          strokeWidth="1.6"
-          strokeDasharray="4 6"
+          stroke="#181511"
+          strokeWidth="1.3"
+          strokeDasharray="2 7"
           fill="none"
           initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 0.8 }}
+          whileInView={{ pathLength: 1, opacity: 0.55 }}
           viewport={{ once: true }}
           transition={{ duration: 1.8, delay: 0.3 + i * 0.25 }}
         />
       ))}
 
-      {/* glowing hubs */}
+      {/* amber hubs */}
       {HUBS.map(([x, y], i) => (
         <g key={i}>
-          <circle cx={x} cy={y} r="4.5" className="cov-dot" />
-          <circle cx={x} cy={y} r="4.5" fill="none" stroke="#ff7a3d" strokeWidth="1.5">
-            <animate attributeName="r" from="4.5" to="14" dur="2.4s" begin={`${i * 0.3}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" from="0.7" to="0" dur="2.4s" begin={`${i * 0.3}s`} repeatCount="indefinite" />
+          <circle cx={x} cy={y} r="4" className="cov-dot" />
+          <circle cx={x} cy={y} r="4" fill="none" stroke="#d94e1f" strokeWidth="1.3">
+            <animate attributeName="r" from="4" to="13" dur="2.6s" begin={`${i * 0.3}s`} repeatCount="indefinite" />
+            <animate attributeName="opacity" from="0.6" to="0" dur="2.6s" begin={`${i * 0.3}s`} repeatCount="indefinite" />
           </circle>
         </g>
       ))}
-
-      <defs>
-        <linearGradient id="cov-g" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#5e9bff" />
-          <stop offset="100%" stopColor="#ff7a3d" />
-        </linearGradient>
-      </defs>
     </svg>
   )
 }
